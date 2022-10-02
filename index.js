@@ -8,6 +8,12 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
+  const transport = socket.conn.transport.name; // in most cases, "polling"
+
+  socket.conn.on("upgrade", () => {
+    const upgradedTransport = socket.conn.transport.name; // in most cases, "websocket"
+  });
+  
   socket.on('chat message', msg => {
     io.emit('chat message', msg);
   });
