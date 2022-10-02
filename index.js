@@ -1,6 +1,11 @@
 const app = require('express')();
 const http = require('http').Server(app);
-const io = require('socket.io')(http);
+const io = require('socket.io')(http, {
+  cors: {
+    origin: "https://example.com",
+    methods: ["GET", "POST"]
+  }
+});
 const port = process.env.PORT || 3000;
 
 app.get('/', (req, res) => {
@@ -13,7 +18,7 @@ io.on('connection', (socket) => {
   socket.conn.on("upgrade", () => {
     const upgradedTransport = socket.conn.transport.name; // in most cases, "websocket"
   });
-  
+
   socket.on('chat message', msg => {
     io.emit('chat message', msg);
   });
